@@ -23,4 +23,5 @@ function formatSheet(theme) {
   formatText(sheet, dataRange);
   addCheckboxes(sheet, dataRange);
   resizeToFit(sheet, dataRange);
+  overflowTitleRow(sheet, dataRange); // apply after resizing so overflow doesn't inflate column widths
 }

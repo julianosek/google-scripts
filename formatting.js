@@ -34,8 +34,11 @@ function formatText(sheet, dataRange) {
     .setVerticalAlignment("middle");
 
   sheet.getRange(1, 1, HEADER_ROWS, sheet.getMaxColumns()).setFontWeight("bold"); // bold the header rows
+}
 
+// lets the title row spill into empty neighbouring cells instead of wrapping
+function overflowTitleRow(sheet, dataRange) {
   sheet
     .getRange(TITLE_ROW, 1, 1, dataRange.getLastColumn())
-    .setWrapStrategy(SpreadsheetApp.WrapStrategy.OVERFLOW); // let the title row overflow instead of wrapping
+    .setWrapStrategy(SpreadsheetApp.WrapStrategy.OVERFLOW);
 }
