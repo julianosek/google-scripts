@@ -25,3 +25,9 @@ function formatSheet(theme) {
   resizeToFit(sheet, dataRange);
   overflowTitleRow(sheet, dataRange); // apply after resizing so overflow doesn't inflate column widths
 }
+
+
+
+
+
+// what a cringe language
