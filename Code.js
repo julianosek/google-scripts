@@ -2,17 +2,61 @@ const HEADER_ROWS = 2; // number of header rows (title + criteria)
 const TITLE_ROW = 1;
 const CRITERIA_ROW = 2;
 
-const TITLE_BG_COLOUR = "#0b5394";
-const TITLE_FONT_COLOUR = "#ffffff";
-const CRITERIA_BG_COLOUR = "#7babf8";
-const CRITERIA_FONT_COLOUR = "#073763";
+// colour theme per research type: title/criteria row background + font colours
+const THEMES = {
+  PRODUCT: {
+    titleBg: "#0b5394",
+    titleFont: "#ffffff",
+    criteriaBg: "#7babf8",
+    criteriaFont: "#073763",
+  },
+  SERVICE: {
+    titleBg: "#674ea7",
+    titleFont: "#ffffff",
+    criteriaBg: "#b4a7d6",
+    criteriaFont: "#20124d",
+  },
+  TRAVEL: {
+    titleBg: "#ffff00",
+    titleFont: "#000000",
+    criteriaBg: "#fffeb3",
+    criteriaFont: "#000000",
+  },
+};
 
-// runs the full formatting pipeline on the active sheet
-function formatSheet() {
+// adds the custom menu when the spreadsheet opens
+function onOpen() {
+  const ui = SpreadsheetApp.getUi();
+  ui.createMenu("Sheet Tools")
+    .addSubMenu(
+      ui
+        .createMenu("Apply Formatting")
+        .addItem("Product Research", "formatProductResearch")
+        .addItem("Service Research", "formatServiceResearch")
+        .addItem("Travel Research", "formatTravelResearch")
+    )
+    .addToUi();
+}
+
+// menu entry points, one per research type/theme
+function formatProductResearch() {
+  formatSheet(THEMES.PRODUCT);
+}
+
+function formatServiceResearch() {
+  formatSheet(THEMES.SERVICE);
+}
+
+function formatTravelResearch() {
+  formatSheet(THEMES.TRAVEL);
+}
+
+// runs the full formatting pipeline on the active sheet using the given theme
+function formatSheet(theme) {
   const sheet = SpreadsheetApp.getActiveSheet(); //get the currently active sheet
 
   freezeSheet(sheet);
-  colourSheet(sheet);
+  colourSheet(sheet, theme);
   trimSheet(sheet);
 
   const dataRange = sheet.getDataRange(); // recompute after trimming so it reflects the final table bounds
@@ -27,10 +71,10 @@ function freezeSheet(sheet) {
   sheet.setFrozenColumns(1); // freeze first column
 }
 
-// applies background and font colours to the title and criteria rows
-function colourSheet(sheet) {
-  sheet.getRange(TITLE_ROW + ":" + TITLE_ROW).setBackground(TITLE_BG_COLOUR).setFontColor(TITLE_FONT_COLOUR);
-  sheet.getRange(CRITERIA_ROW + ":" + CRITERIA_ROW).setBackground(CRITERIA_BG_COLOUR).setFontColor(CRITERIA_FONT_COLOUR);
+// applies the theme's background and font colours to the title and criteria rows
+function colourSheet(sheet, theme) {
+  sheet.getRange(TITLE_ROW + ":" + TITLE_ROW).setBackground(theme.titleBg).setFontColor(theme.titleFont);
+  sheet.getRange(CRITERIA_ROW + ":" + CRITERIA_ROW).setBackground(theme.criteriaBg).setFontColor(theme.criteriaFont);
 }
 
 // deletes empty rows/columns outside the table, leaving empty cells inside it intact
